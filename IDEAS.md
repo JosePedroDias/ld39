@@ -39,6 +39,8 @@ What needs to be done
 * platformer with dynamic terrain and grapple hook. think worms/liero
   -> vs fight? lemmings get to somewhere?
 
+* flappy bird with limited fuel (thx @asilva4000 !)
+  -> no excuses. basic game engine easy to set up. leaves time for level design, gfx and polish. may go for this one! 
 
 
 # Classification
@@ -80,3 +82,17 @@ Artwork
 * 2d collisions
 * 3D
 * 3D voxels
+
+
+# Tech stack
+
+For the sake of moving fast due to the hackaton time constraints (and not to diverge from the goal of implementing a game)
+I find it best to still to technology I know by heart.
+
+So first choice is:
+browser / javascript / pixi
+
+Then I could also benefit from fantasy console RAD tools but usage depends on game chose
+TIC80/PICO8 / lua or javascript
+
+If I would go for 3D or 2D with physics or basic collisions, I'd choose
