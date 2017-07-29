@@ -1,5 +1,7 @@
 "use strict";
 
+function noop() {}
+
 PIXI.utils.skipHello();
 
 window.WebFontConfig = {
@@ -19,14 +21,49 @@ window.WebFontConfig = {
 
 WebFont.load(window.WebFontConfig);
 
+const INITIAL_GAS = 20;
+
+const NO_MUSIC = 0;
+const NO_SFX = 0;
+
+const samples = {};
+const songs = {};
+
+let addSample;
+if (NO_SFX) {
+  addSample = function(name) {
+    samples[name] = {
+      play: noop,
+      volume: noop
+    };
+  };
+} else {
+  addSample = function(name) {
+    samples[name] = new Howl({ src: [`assets/sfx/${name}.wav`] });
+  };
+}
+
+let addSong;
+if (NO_MUSIC) {
+  addSong = function(name) {
+    songs[name] = { play: noop };
+  };
+} else {
+  addSong = function(name) {
+    songs[name] = new Howl({ src: [`assets/music/${name}.wav`], loop: true });
+  };
+}
+
 function init() {
   // game state
   let vy = 0;
   let coins = 0;
-  let gas = 20;
+  let gas = INITIAL_GAS;
   let time = 0;
   let running = true;
   let aboutToPause = false;
+
+  const b = new Bump(PIXI);
 
   const app = new PIXI.Application(800, 600, {
     backgroundColor: 0x1099bb,
@@ -46,12 +83,16 @@ function init() {
 
   const fg = new PIXI.Container();
   app.stage.addChild(fg);
+  fg.pivot.x = -app.renderer.width / 2;
+  fg.pivot.y = -app.renderer.height / 2;
+
+  const obstacles = [];
 
   // create a new Sprite from an image path
   const ship = PIXI.Sprite.fromImage("assets/gfx/ship.png");
   ship.anchor.set(0.5);
-  ship.x = app.renderer.width / 2;
-  ship.y = app.renderer.height / 2;
+  ship.x = 0; // app.renderer.width / 2;
+  ship.y = 0; // app.renderer.height / 2;
   fg.addChild(ship);
 
   const countT = new PIXI.Text("---", {
@@ -71,24 +112,18 @@ function init() {
 
   function onDown() {
     vy = -5;
+    samples.jump.play();
   }
   window.addEventListener("touchstart", onDown);
   window.addEventListener("mousedown", onDown);
 
-  const samples = {};
-  const songs = {};
-  function addSample(name) {
-    samples[name] = new Howl({ src: [`assets/sfx/${name}.wav`] });
-  }
-  function addSong(name) {
-    songs[name] = new Howl({ src: [`assets/music/${name}.wav`], loop: true });
-  }
   addSample("coin");
   addSample("explosion");
   addSample("jump");
   addSample("powerup");
   addSong("8bit_detective");
-  // songs["8bit_detective"].play();
+  songs["8bit_detective"].play();
+  samples.jump.volume(0.05);
 
   const level = window.levels["1"];
   function addLevelItem(o) {
@@ -98,18 +133,25 @@ function init() {
     spr.anchor.set(0.5);
     spr.position.x = o.p[0];
     spr.position.y = o.p[1];
+    obstacles.push(spr);
     fg.addChild(spr);
   }
   level.forEach(addLevelItem);
 
-  window.addEventListener("keydown", function(ev) {
-    const o = {
-      37: "coin",
-      39: "explosion",
-      38: "jump",
-      40: "powerup"
-    };
+  function reset() {
+    app.ticker.update(0); // TODO still doesn't reset game time
+    app.ticker.lastTime = 0;
+    time = 0;
+    coins = 0;
+    vy = 0;
+    gas = INITIAL_GAS;
+    ship.position.x = 0;
+    ship.position.y = 0;
+    fg.pivot.x = -app.renderer.width / 2;
+    fg.pivot.y = -app.renderer.height / 2;
+  }
 
+  window.addEventListener("keydown", function(ev) {
     if (ev.keyCode === 80) {
       // toggle pause with P
       running = !running;
@@ -124,6 +166,7 @@ function init() {
         aboutToPause = true;
       }
     } else if (ev.keyCode === 32) {
+      // space adds item at ship position (dev time stuff)
       addLevelItem({
         p: [ship.position.x, ship.position.y],
         d: [32, 32],
@@ -131,11 +174,7 @@ function init() {
       });
     }
 
-    console.log(ev.keyCode);
-    const n = o[ev.keyCode];
-    if (n) {
-      samples[n].play();
-    }
+    //console.log(ev.keyCode);
   });
 
   app.ticker.add(function(delta) {
@@ -151,6 +190,17 @@ function init() {
       time = t;
     }
     countT.text = `Gas: ${gas}  Coins: ${coins}  Time: ${time}`;
+
+    if (ship.position.y > 250) {
+      samples.explosion.play();
+      return reset();
+    }
+
+    const collision = b.hit(ship, obstacles); // sprite or {x,y}, sprite or Array<Sprite>, dont intersect, bounce, w/ global coords
+    if (collision) {
+      samples.explosion.play();
+      return reset();
+    }
 
     ship.position.x += 4 * delta;
     fg.pivot.x += 4 * delta;

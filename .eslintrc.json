@@ -5,7 +5,8 @@
   "globals": {
     "PIXI": false,
     "Howl": false,
-    "WebFont": false
+    "WebFont": false,
+    "Bump": false
   },
   "parserOptions": {
     "ecmaVersion": 6,

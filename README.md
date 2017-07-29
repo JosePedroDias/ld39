@@ -65,14 +65,10 @@ This is my Ludum Dare 39 compo entry.
 
 ## Tech stack
 
-* browser
-* javascript
-* [pixi](http://www.pixijs.com/)
-  * collision detection with [bump](https://github.com/kittykatattack/bump)
-  * audio with [howler]()
-  * nine slice plane [docs](http://pixijs.download/release/docs/PIXI.mesh.NineSlicePlane.html)
-  * 🔥 normal light mapping [article](http://proclive.io/lights-in-pixi-js/) [repos](https://github.com/finscn/pixi.js)
-  * 🔥 deferred shading for lights [example](http://www.goodboydigital.com/pixijs/pixilights/)
+* browser and javascript
+* 2D gfx with [pixi](http://www.pixijs.com/)
+* collision detection with [bump](https://github.com/kittykatattack/bump)
+* audio with [howler](https://howlerjs.com/) [docs](https://github.com/goldfire/howler.js#documentation)
 
 
 ## Artwork stack
@@ -86,8 +82,8 @@ This is my Ludum Dare 39 compo entry.
   * <> shooting gallery - bg/*
   * ...
 
-* sfx??
-  * [bfxr?](http://www.bfxr.net/)
+* sfx
+  * [bfxr](http://www.bfxr.net/)
 
 * music??
   * [8 bit detective (placeholder)](https://www.dl-sounds.com/royalty-free/8-bit-detective/)
@@ -111,7 +107,7 @@ This is my Ludum Dare 39 compo entry.
   * ~~xx constant movement~~
   * ~~impulse~~
   * ~~texture loading~~
-  * basic box collision support
+  * ~~basic box collision support~~
   * pick up coin
   * gas tank
 * support for editing level (adding items in-game)
