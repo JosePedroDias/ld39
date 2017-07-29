@@ -1,5 +1,7 @@
 "use strict"; // @flow
 
+PIXI.utils.skipHello();
+
 window.WebFontConfig = {
   google: {
     families: ["Arvo:700"]
@@ -25,6 +27,8 @@ function init() {
   let coins = 0;
   let gas = 20;
   let time = 0;
+  let running = true;
+  let aboutToPause = false;
 
   const app = new PIXI.Application(800, 600, {
     backgroundColor: 0x1099bb,
@@ -42,8 +46,15 @@ function init() {
   window.addEventListener("resize", onResize);
   onResize();
 
+  const fg = new PIXI.Container();
+  app.stage.addChild(fg);
+
   // create a new Sprite from an image path
-  const bunny = PIXI.Sprite.fromImage("assets/gfx/bunny.png");
+  const ship = PIXI.Sprite.fromImage("assets/gfx/ship.png");
+  ship.anchor.set(0.5);
+  ship.x = app.renderer.width / 2;
+  ship.y = app.renderer.height / 2;
+  fg.addChild(ship);
 
   const countT = new PIXI.Text("Hello world", {
     fontWeight: "bold",
@@ -59,11 +70,6 @@ function init() {
   countT.y = 50;
   countT.anchor.x = 1;
   app.stage.addChild(countT);
-
-  bunny.anchor.set(0.5);
-  bunny.x = app.renderer.width / 2;
-  bunny.y = app.renderer.height / 2;
-  app.stage.addChild(bunny);
 
   let isDown = false;
   function onDown(ev) {
@@ -94,6 +100,15 @@ function init() {
   addSong("8bit_detective");
   songs["8bit_detective"].play();
 
+  const level = window.levels["1"];
+  level.forEach(function(o) {
+    const spr = PIXI.Sprite.fromImage(`assets/gfx/${o.s}.png`);
+    spr.anchor.set(0.5);
+    spr.x = app.renderer.width / 2 + o.p[0];
+    spr.y = app.renderer.height / 2 + o.p[1];
+    fg.addChild(spr);
+  });
+
   window.addEventListener("keydown", function(ev) {
     const o = {
       37: "coin",
@@ -101,7 +116,22 @@ function init() {
       38: "jump",
       40: "powerup"
     };
-    // console.log(ev.keyCode);
+
+    if (ev.keyCode === 80) {
+      running = !running;
+      if (running) {
+        fg.alpha = 1;
+        songs["8bit_detective"].play();
+        app.ticker.start();
+      } else {
+        fg.alpha = 0.5;
+        songs["8bit_detective"].stop();
+        app.ticker.update(0);
+        aboutToPause = true;
+      }
+    }
+
+    console.log(ev.keyCode);
     const n = o[ev.keyCode];
     if (n) {
       samples[n].play();
@@ -109,14 +139,24 @@ function init() {
   });
 
   app.ticker.add(function(delta) {
-    // console.log(app.ticker);
+    if (aboutToPause) {
+      countT.text = "paused";
+      app.ticker.stop();
+      aboutToPause = false;
+      return;
+    }
+
     const t = Math.floor(app.ticker.lastTime / 1000);
     if (t !== time) {
       time = t;
     }
     countT.text = `Gas:${gas}  Coins:${coins}  Time:${time}`;
+
+    ship.position.x += 4 * delta;
+    fg.pivot.x += 4 * delta;
+
     if (isDown) {
-      bunny.position.x += 1 * delta;
+      ship.position.y += 1 * delta;
     }
   });
 }

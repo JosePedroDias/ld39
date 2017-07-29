@@ -78,10 +78,12 @@ This is my Ludum Dare 39 compo entry.
 ## Artwork stack
 
 * graphics (inkscape, graphicsgale and/or gimp, not sure yet)
-  * <https://kenney.nl/assets/robot-pack>
+  * <> jumper pack - item/coins
   * <https://kenney.nl/assets/platformer-pack-redux>
   * <https://kenney.nl/assets/background-elements>
   * <https://kenney.nl/assets/physics-assets>
+  * <https://kenney.nl/assets/space-shooter-redux> - item/pills
+  * <> shooting gallery - bg/*
   * ...
 
 * sfx??
