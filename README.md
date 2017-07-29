@@ -68,6 +68,8 @@ This is my Ludum Dare 39 compo entry.
 * browser
 * javascript
 * [pixi](http://www.pixijs.com/)
+  * collision detection with [bump](https://github.com/kittykatattack/bump)
+  * audio with [howler]()
   * nine slice plane [docs](http://pixijs.download/release/docs/PIXI.mesh.NineSlicePlane.html)
   * 🔥 normal light mapping [article](http://proclive.io/lights-in-pixi-js/) [repos](https://github.com/finscn/pixi.js)
   * 🔥 deferred shading for lights [example](http://www.goodboydigital.com/pixijs/pixilights/)
@@ -83,15 +85,30 @@ This is my Ludum Dare 39 compo entry.
   * ...
 
 * sfx??
-  * TODO
+  * [bfxr?](http://www.bfxr.net/)
 
 * music??
+  * [8 bit detective (placeholder)](https://www.dl-sounds.com/royalty-free/8-bit-detective/)
   * [aphex twin - not sure licensing](https://aphextwin.warp.net/)
 
+
+## some references
+
+* <https://github.com/kittykatattack/learningPixi>
 
 ## TODO list
 
 * ~~brainstorm~~
 * set up basic engine
+  * ~~renders sprites~~
+  * ~~touch support~~
+  * ~~music and sfx playback~~
+  * level loading
+  * keep aspect ratio and viewport independent of screen
 * implement game rules
+  * xx constant movement
+  * impulse
+  * basic box collision support
+  * pick up coin
+  * gas tank
 * support for editing level (adding items in-game)
