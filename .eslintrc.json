@@ -1,0 +1,16 @@
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "PIXI": false,
+    "Howl": false,
+    "WebFont": false
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {}
+  },
+  "extends": "eslint:recommended",
+  "rules": {}
+}

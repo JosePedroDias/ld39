@@ -3,11 +3,12 @@
 PIXI.utils.skipHello();
 
 window.WebFontConfig = {
+  // preload webfonts
   google: {
     families: ["Arvo:700"]
   },
-
   active: function() {
+    // preload pixi assets
     PIXI.loaders.shared
       .add("assets/gfx/ship.png")
       .add("assets/gfx/ground/Grass/grassCenter.png")
@@ -16,16 +17,7 @@ window.WebFontConfig = {
   }
 };
 
-(function() {
-  var wf = document.createElement("script");
-  wf.src =
-    ("https:" === document.location.protocol ? "https" : "http") +
-    "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
-  wf.type = "text/javascript";
-  wf.async = "true";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(wf, s);
-})();
+WebFont.load(window.WebFontConfig);
 
 function init() {
   // game state
@@ -77,7 +69,7 @@ function init() {
   countT.anchor.x = 1;
   app.stage.addChild(countT);
 
-  function onDown(ev) {
+  function onDown() {
     vy = -5;
   }
   window.addEventListener("touchstart", onDown);
@@ -99,7 +91,7 @@ function init() {
   // songs["8bit_detective"].play();
 
   const level = window.levels["1"];
-  level.forEach(function(o) {
+  function addLevelItem(o) {
     const tx = PIXI.Texture.fromImage(`assets/gfx/${o.t}.png`);
     const spr = new PIXI.extras.TilingSprite(tx, o.d[0], o.d[1]);
     spr.cacheAsBitmap = true;
@@ -107,7 +99,8 @@ function init() {
     spr.position.x = o.p[0];
     spr.position.y = o.p[1];
     fg.addChild(spr);
-  });
+  }
+  level.forEach(addLevelItem);
 
   window.addEventListener("keydown", function(ev) {
     const o = {
@@ -118,6 +111,7 @@ function init() {
     };
 
     if (ev.keyCode === 80) {
+      // toggle pause with P
       running = !running;
       if (running) {
         fg.alpha = 1;
@@ -129,6 +123,12 @@ function init() {
         app.ticker.update(0);
         aboutToPause = true;
       }
+    } else if (ev.keyCode === 32) {
+      addLevelItem({
+        p: [ship.position.x, ship.position.y],
+        d: [32, 32],
+        t: "ground/Grass/grassCenter"
+      });
     }
 
     console.log(ev.keyCode);
