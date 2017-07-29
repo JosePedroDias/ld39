@@ -54,6 +54,15 @@ This is my Ludum Dare 39 compo entry.
     * lighting as an obstacle (would require sprites to have )
 
 
+## Supported browsers
+
+* tested / targetted
+  * android chrome
+  * mobile safari (iphone/ipad)
+* best effort
+  * chrome, safari
+
+
 ## Tech stack
 
 * browser
