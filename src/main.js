@@ -1,4 +1,4 @@
-"use strict"; // @flow
+"use strict";
 
 PIXI.utils.skipHello();
 
@@ -8,7 +8,11 @@ window.WebFontConfig = {
   },
 
   active: function() {
-    init();
+    PIXI.loaders.shared
+      .add("assets/gfx/ship.png")
+      .add("assets/gfx/ground/Grass/grassCenter.png")
+      .add("assets/gfx/ground/Planet/planetCenter.png")
+      .load(init);
   }
 };
 
@@ -24,6 +28,8 @@ window.WebFontConfig = {
 })();
 
 function init() {
+  // game state
+  let vy = 0;
   let coins = 0;
   let gas = 20;
   let time = 0;
@@ -56,7 +62,7 @@ function init() {
   ship.y = app.renderer.height / 2;
   fg.addChild(ship);
 
-  const countT = new PIXI.Text("Hello world", {
+  const countT = new PIXI.Text("---", {
     fontWeight: "bold",
     // fontStyle: "italic",
     fontSize: 20,
@@ -71,19 +77,11 @@ function init() {
   countT.anchor.x = 1;
   app.stage.addChild(countT);
 
-  let isDown = false;
   function onDown(ev) {
-    isDown = true;
-  }
-  function onUp() {
-    isDown = false;
+    vy = -5;
   }
   window.addEventListener("touchstart", onDown);
-  window.addEventListener("touchend", onUp);
   window.addEventListener("mousedown", onDown);
-  window.addEventListener("mouseup", onUp);
-  //window.addEventListener("keydown", onDown);
-  //window.addEventListener("keyup", onUp);
 
   const samples = {};
   const songs = {};
@@ -98,14 +96,16 @@ function init() {
   addSample("jump");
   addSample("powerup");
   addSong("8bit_detective");
-  songs["8bit_detective"].play();
+  // songs["8bit_detective"].play();
 
   const level = window.levels["1"];
   level.forEach(function(o) {
-    const spr = PIXI.Sprite.fromImage(`assets/gfx/${o.s}.png`);
+    const tx = PIXI.Texture.fromImage(`assets/gfx/${o.t}.png`);
+    const spr = new PIXI.extras.TilingSprite(tx, o.d[0], o.d[1]);
+    spr.cacheAsBitmap = true;
     spr.anchor.set(0.5);
-    spr.x = app.renderer.width / 2 + o.p[0];
-    spr.y = app.renderer.height / 2 + o.p[1];
+    spr.position.x = o.p[0];
+    spr.position.y = o.p[1];
     fg.addChild(spr);
   });
 
@@ -150,13 +150,11 @@ function init() {
     if (t !== time) {
       time = t;
     }
-    countT.text = `Gas:${gas}  Coins:${coins}  Time:${time}`;
+    countT.text = `Gas: ${gas}  Coins: ${coins}  Time: ${time}`;
 
     ship.position.x += 4 * delta;
     fg.pivot.x += 4 * delta;
-
-    if (isDown) {
-      ship.position.y += 1 * delta;
-    }
+    ship.position.y += vy * delta;
+    vy += 0.09 * delta;
   });
 }
