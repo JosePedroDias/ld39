@@ -93,6 +93,7 @@ function init() {
   ship.anchor.set(0.5);
   ship.x = 0; // app.renderer.width / 2;
   ship.y = 0; // app.renderer.height / 2;
+  ship.hitArea = new PIXI.Rectangle(0, 0, 128, 64);
   fg.addChild(ship);
 
   const countT = new PIXI.Text("---", {
@@ -196,7 +197,26 @@ function init() {
       return reset();
     }
 
-    const collision = b.hit(ship, obstacles); // sprite or {x,y}, sprite or Array<Sprite>, dont intersect, bounce, w/ global coords
+    //const collision = b.hit(ship, obstacles); // sprite or {x,y}, sprite or Array<Sprite>, dont intersect, bounce, w/ global coords
+
+    const x = ship.position.x;
+    const y = ship.position.y;
+    const w = 64;
+    const h = 32;
+    const points = [
+      { x: x + w * 0.7, y: y - h },
+      { x: x + w, y: y },
+      { x: x + w * 0.7, y: y + h },
+      { x: x - w, y: y - h },
+      { x: x - w, y: y + h }
+    ];
+    function pointHitsObstacle(p) {
+      //return b.hit(p, obstacles);
+      return obstacles.some(function(obs) {
+        return b.hit(p, obs);
+      });
+    }
+    const collision = points.some(pointHitsObstacle);
     if (collision) {
       samples.explosion.play();
       return reset();
