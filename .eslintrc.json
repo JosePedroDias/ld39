@@ -6,7 +6,13 @@
     "PIXI": false,
     "Howl": false,
     "WebFont": false,
-    "Bump": false
+    "Bump": false,
+    "addSample": true,
+    "addSong": true,
+    "samples": true,
+    "songs": true,
+    "init": true,
+    "shipCollidesWithObstacle": true
   },
   "parserOptions": {
     "ecmaVersion": 6,

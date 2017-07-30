@@ -1,60 +1,8 @@
 "use strict";
 
-function noop() {}
-
-PIXI.utils.skipHello();
-
-window.WebFontConfig = {
-  // preload webfonts
-  google: {
-    families: ["Arvo:700"]
-  },
-  active: function() {
-    // preload pixi assets
-    PIXI.loaders.shared
-      .add("assets/gfx/ship.png")
-      .add("assets/gfx/ground/Grass/grassCenter.png")
-      .add("assets/gfx/ground/Planet/planetCenter.png")
-      .load(init);
-  }
-};
-
-WebFont.load(window.WebFontConfig);
-
 const INITIAL_GAS = 20;
 
-const NO_MUSIC = 0;
-const NO_SFX = 0;
-
-const samples = {};
-const songs = {};
-
-let addSample;
-if (NO_SFX) {
-  addSample = function(name) {
-    samples[name] = {
-      play: noop,
-      volume: noop
-    };
-  };
-} else {
-  addSample = function(name) {
-    samples[name] = new Howl({ src: [`assets/sfx/${name}.wav`] });
-  };
-}
-
-let addSong;
-if (NO_MUSIC) {
-  addSong = function(name) {
-    songs[name] = { play: noop };
-  };
-} else {
-  addSong = function(name) {
-    songs[name] = new Howl({ src: [`assets/music/${name}.wav`], loop: true });
-  };
-}
-
-function init() {
+window.init = function init(app) {
   // game state
   let vy = 0;
   let coins = 0;
@@ -62,24 +10,6 @@ function init() {
   let time = 0;
   let running = true;
   let aboutToPause = false;
-
-  const b = new Bump(PIXI);
-
-  const app = new PIXI.Application(800, 600, {
-    backgroundColor: 0x1099bb,
-    antialias: false,
-    transparent: false,
-    resolution: 1
-  });
-  app.renderer.autoResize = true;
-  document.body.appendChild(app.view);
-
-  function onResize() {
-    app.renderer.resize(window.innerWidth, window.innerHeight);
-  }
-
-  window.addEventListener("resize", onResize);
-  onResize();
 
   const fg = new PIXI.Container();
   app.stage.addChild(fg);
@@ -197,27 +127,7 @@ function init() {
       return reset();
     }
 
-    //const collision = b.hit(ship, obstacles); // sprite or {x,y}, sprite or Array<Sprite>, dont intersect, bounce, w/ global coords
-
-    const x = ship.position.x;
-    const y = ship.position.y;
-    const w = 64;
-    const h = 32;
-    const points = [
-      { x: x + w * 0.7, y: y - h },
-      { x: x + w, y: y },
-      { x: x + w * 0.7, y: y + h },
-      { x: x - w, y: y - h },
-      { x: x - w, y: y + h }
-    ];
-    function pointHitsObstacle(p) {
-      //return b.hit(p, obstacles);
-      return obstacles.some(function(obs) {
-        return b.hit(p, obs);
-      });
-    }
-    const collision = points.some(pointHitsObstacle);
-    if (collision) {
+    if (shipCollidesWithObstacle(ship, obstacles)) {
       samples.explosion.play();
       return reset();
     }
@@ -227,4 +137,6 @@ function init() {
     ship.position.y += vy * delta;
     vy += 0.09 * delta;
   });
-}
+};
+
+window.run();
