@@ -70,7 +70,6 @@ This is my Ludum Dare 39 compo entry.
 * collision detection with [bump](https://github.com/kittykatattack/bump)
 * audio with [howler](https://howlerjs.com/) [docs](https://github.com/goldfire/howler.js#documentation)
 
-
 ## Artwork stack
 
 * graphics (inkscape, graphicsgale and/or gimp, not sure yet)
@@ -87,6 +86,8 @@ This is my Ludum Dare 39 compo entry.
   full credits to @asilva4000
 
   composed with reason
+
+  audio encoding with [xmedia recode](http://www.xmedia-recode.de/download.html)
 
 ## some references
 
@@ -112,9 +113,12 @@ This is my Ludum Dare 39 compo entry.
 * ~~animated items (coins etc)~~
 * ~~start screen > play > game over | pause states~~
 * reset time on game over
-* create more levels
 * pitch ship according to y speed
 * debug & improve collision points
+* animate title screen
+* create more levels
+* implement and add power-ups
+* replace kenney gfx with my own, maybe?
 * compress audio to howler compatible formats
 * highscores (displayed on game over?)
 * toggle sfx and audio (persist to LS)

@@ -4,12 +4,14 @@ const sfx = {};
 const music = {};
 
 function addSfx(name) {
-  sfx[name] = new Howl({ src: [`assets/sfx/${name}.wav`] });
+  sfx[name] = new Howl({
+    src: [`assets/sfx/${name}.webm`, `assets/sfx/${name}.mp3`]
+  });
 }
 
 function addMusic(name) {
   music[name] = new Howl({
-    src: [`assets/music/${name}.wav`],
+    src: [`assets/music/${name}.webm`, `assets/music/${name}.mp3`],
     loop: name !== "gameOver"
   });
 }
