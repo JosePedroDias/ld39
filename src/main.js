@@ -24,7 +24,7 @@ window.init = function init(app) {
   let state = "title";
   let renderFn = titleScreenRender;
 
-  music.inGame.volume(0);
+  music.title.play();
 
   // main sprites
   let _tx = PIXI.Texture.fromImage(fetchGfx("black"));
@@ -186,6 +186,7 @@ window.init = function init(app) {
         fg.alpha = 1;
       } else if (state === "title" || state === "gameOver") {
         // title -> playing or gameOver -> playing
+        music.title.stop();
         music.gameOver.stop();
         time = 0;
         coins = 0;
@@ -200,19 +201,19 @@ window.init = function init(app) {
       } else {
         throw trans;
       }
-      music.inGame.play();
+      music.main.play();
       app.ticker.start();
       state = newState;
       renderFn = playingRender;
     } else if (newState === "paused") {
       countT.text = "paused";
       fg.alpha = 0.5;
-      music.inGame.stop();
+      music.main.stop();
       state = newState;
       renderFn = pausedRender;
     } else if (newState === "gameOver") {
       countT.text = "game over!";
-      music.inGame.stop();
+      music.main.stop();
       music.gameOver.play();
       sfx.crash.play();
       state = newState;

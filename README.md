@@ -115,6 +115,7 @@ This is my Ludum Dare 39 compo entry.
 * create more levels
 * pitch ship according to y speed
 * debug & improve collision points
+* compress audio to howler compatible formats
 * highscores (displayed on game over?)
 * toggle sfx and audio (persist to LS)
 * additional backgrounds with different parallax?
