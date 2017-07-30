@@ -7,6 +7,8 @@
     "Howl": false,
     "WebFont": false,
     "Bump": false,
+    "W": true,
+    "H": true,
     "addSample": true,
     "addSong": true,
     "samples": true,

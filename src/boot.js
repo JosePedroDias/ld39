@@ -2,7 +2,9 @@
 
 PIXI.utils.skipHello();
 
-const AR = 1;
+const W = 800;
+const H = 600;
+const AR = W / H;
 
 window.WebFontConfig = {
   // preload webfonts
@@ -16,7 +18,7 @@ window.WebFontConfig = {
       .add("assets/gfx/ground/Grass/grassCenter.png")
       .add("assets/gfx/ground/Planet/planetCenter.png")
       .load(function() {
-        const app = new PIXI.Application(800, 600, {
+        const app = new PIXI.Application(W, H, {
           backgroundColor: 0x1099bb,
           antialias: false,
           transparent: false,
@@ -34,9 +36,16 @@ window.WebFontConfig = {
           let s;
           const ar = w / h;
           if (ar > AR) {
+            s = h / H;
+            x = ~~((w - W * s) / 2);
           } else {
+            s = w / W;
+            y = ~~((h - H * s) / 2);
           }
-          app.renderer.resize(window.innerWidth, window.innerHeight);
+          document.body.style.paddingLeft = x + "px";
+          document.body.style.paddingTop = y + "px";
+          app.renderer.resize(W * s, H * s);
+          app.stage.scale.set(s);
         }
 
         window.addEventListener("resize", onResize);

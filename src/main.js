@@ -13,22 +13,21 @@ window.init = function init(app) {
 
   const fg = new PIXI.Container();
   app.stage.addChild(fg);
-  fg.pivot.x = -app.renderer.width / 2;
-  fg.pivot.y = -app.renderer.height / 2;
+  fg.pivot.x = W / 2;
+  fg.pivot.y = H / 2;
 
   const obstacles = [];
 
   // create a new Sprite from an image path
   const ship = PIXI.Sprite.fromImage("assets/gfx/ship.png");
   ship.anchor.set(0.5);
-  ship.x = 0; // app.renderer.width / 2;
-  ship.y = 0; // app.renderer.height / 2;
+  ship.x = 0;
+  ship.y = 0;
   ship.hitArea = new PIXI.Rectangle(0, 0, 128, 64);
   fg.addChild(ship);
 
   const countT = new PIXI.Text("---", {
     fontWeight: "bold",
-    // fontStyle: "italic",
     fontSize: 20,
     fontFamily: "Arvo",
     fill: "#FFF",
@@ -36,7 +35,7 @@ window.init = function init(app) {
     align: "center",
     strokeThickness: 4
   });
-  countT.x = app.renderer.width - 100;
+  countT.x = W - 100;
   countT.y = 50;
   countT.anchor.x = 1;
   app.stage.addChild(countT);
@@ -78,8 +77,8 @@ window.init = function init(app) {
     gas = INITIAL_GAS;
     ship.position.x = 0;
     ship.position.y = 0;
-    fg.pivot.x = -app.renderer.width / 2;
-    fg.pivot.y = -app.renderer.height / 2;
+    fg.pivot.x = -W / 2;
+    fg.pivot.y = -H / 2;
   }
 
   window.addEventListener("keydown", function(ev) {

@@ -97,17 +97,18 @@ This is my Ludum Dare 39 compo entry.
 ## TODO list
 
 * ~~brainstorm~~
-* set up basic engine
+* ~~set up basic engine~~
   * ~~renders sprites~~
   * ~~touch support~~
   * ~~music and sfx playback~~
   * ~~level loading~~
-  * keep aspect ratio and viewport independent of screen
+  * ~~keep aspect ratio and viewport independent of screen~~
 * implement game rules
   * ~~xx constant movement~~
   * ~~impulse~~
   * ~~texture loading~~
   * ~~basic box collision support~~
   * pick up coin
-  * gas tank
+  * gas tank logic
 * support for editing level (adding items in-game)
+* create levels
