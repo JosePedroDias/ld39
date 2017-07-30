@@ -3,6 +3,10 @@
 const INITIAL_GAS = 10;
 const INITIAL_SHIP_Y = -220;
 
+function fetchGfx(n) {
+  return window.solveGfxName(window.textureMap[n]);
+}
+
 window.init = function init(app) {
   // game state
   let vy = 0;
@@ -12,20 +16,10 @@ window.init = function init(app) {
   let running = true;
   let aboutToPause = false;
 
-  const fg = new PIXI.Container();
-  app.stage.addChild(fg);
-  fg.pivot.x = W / 2;
-  fg.pivot.y = H / 2;
-
-  const obstacles = [];
-
-  // create a new Sprite from an image path
-  const ship = PIXI.Sprite.fromImage("assets/gfx/ship.png");
-  ship.anchor.set(0.5);
-  ship.x = 0;
-  ship.y = INITIAL_SHIP_Y;
-  ship.hitArea = new PIXI.Rectangle(0, 0, 128, 64);
-  fg.addChild(ship);
+  // main sprites
+  let _tx = PIXI.Texture.fromImage(fetchGfx("black"));
+  const bg = new PIXI.extras.TilingSprite(_tx, W * 2 * Math.ceil(W / 256), H); // probably could be shorter but works
+  app.stage.addChild(bg);
 
   const countT = new PIXI.Text("---", {
     fontWeight: "bold",
@@ -41,7 +35,22 @@ window.init = function init(app) {
   countT.anchor.x = 1;
   app.stage.addChild(countT);
 
+  const fg = new PIXI.Container();
+  app.stage.addChild(fg);
+  fg.pivot.x = W / 2;
+  fg.pivot.y = H / 2;
+
+  const obstacles = [];
+
+  const ship = PIXI.Sprite.fromImage(fetchGfx("ship"));
+  ship.anchor.set(0.5);
+  ship.x = 0;
+  ship.y = INITIAL_SHIP_Y;
+  ship.hitArea = new PIXI.Rectangle(0, 0, 128, 64);
+  fg.addChild(ship);
+
   function onDown() {
+    // if (app.ticker) TODO SKIP IF PAUSED
     vy = -5;
     samples.jump.play();
   }
@@ -53,7 +62,7 @@ window.init = function init(app) {
   addSample("jump");
   addSample("powerup");
   addSong("8bit_detective");
-  // songs["8bit_detective"].play();
+  songs["8bit_detective"].play();
   samples.jump.volume(0.05);
 
   const level = window.levels["1"];
@@ -62,10 +71,25 @@ window.init = function init(app) {
     if (!t2) {
       window.alert(`Haven't found "${o.t}" in the textureMap!`);
     }
-    const img = `assets/gfx/${t2}.png`;
+    let img, imgs;
+
+    if (t2 instanceof Array) {
+      imgs = t2.map(function(n) {
+        return solveGfxName(n);
+      });
+    } else {
+      img = solveGfxName(t2);
+    }
 
     let spr;
-    if ("d" in o) {
+    if (imgs) {
+      const txs = imgs.map(function(i) {
+        return PIXI.Texture.fromImage(i);
+      });
+      spr = new PIXI.extras.AnimatedSprite(txs);
+      spr.animationSpeed = 0.1;
+      spr.gotoAndPlay(0);
+    } else if ("d" in o) {
       const tx = PIXI.Texture.fromImage(img);
       spr = new PIXI.extras.TilingSprite(tx, o.d[0], o.d[1]);
       spr.cacheAsBitmap = true;
@@ -131,6 +155,7 @@ window.init = function init(app) {
   });
 
   app.ticker.add(function(delta) {
+    // render
     if (aboutToPause) {
       countT.text = "paused";
       app.ticker.stop();
@@ -161,8 +186,10 @@ window.init = function init(app) {
         obs.visible = false;
         if (d.k === "coin") {
           ++coins;
+          samples.coin.play();
         } else if (d.k === "gas") {
           gas += 10;
+          samples.powerup.play();
         }
       }
     }
@@ -171,6 +198,11 @@ window.init = function init(app) {
     fg.pivot.x += 4 * delta;
     ship.position.y += vy * delta;
     vy += 0.09 * delta;
+
+    bg.pivot.x += 2 * delta;
+    if (bg.pivot.x > bg._width / 2) {
+      bg.pivot.x -= 256;
+    }
   });
 };
 

@@ -15,7 +15,8 @@
     "songs": true,
     "init": true,
     "shipCollidesWithObstacle": true,
-    "getHitObstacle": true
+    "getHitObstacle": true,
+    "solveGfxName": true
   },
   "parserOptions": {
     "ecmaVersion": 6,
