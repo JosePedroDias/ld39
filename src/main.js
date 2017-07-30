@@ -1,6 +1,7 @@
 "use strict";
 
 const INITIAL_GAS = 10;
+const INITIAL_SHIP_Y = -220;
 
 window.init = function init(app) {
   // game state
@@ -22,7 +23,7 @@ window.init = function init(app) {
   const ship = PIXI.Sprite.fromImage("assets/gfx/ship.png");
   ship.anchor.set(0.5);
   ship.x = 0;
-  ship.y = 0;
+  ship.y = INITIAL_SHIP_Y;
   ship.hitArea = new PIXI.Rectangle(0, 0, 128, 64);
   fg.addChild(ship);
 
@@ -62,9 +63,19 @@ window.init = function init(app) {
       window.alert(`Haven't found "${o.t}" in the textureMap!`);
     }
     const img = `assets/gfx/${t2}.png`;
-    const tx = PIXI.Texture.fromImage(img);
-    const spr = new PIXI.extras.TilingSprite(tx, o.d[0], o.d[1]);
-    spr.cacheAsBitmap = true;
+
+    let spr;
+    if ("d" in o) {
+      const tx = PIXI.Texture.fromImage(img);
+      spr = new PIXI.extras.TilingSprite(tx, o.d[0], o.d[1]);
+      spr.cacheAsBitmap = true;
+    } else {
+      spr = PIXI.Sprite.fromImage(img);
+    }
+
+    if ("a" in o) {
+      spr.alpha = o.a;
+    }
     spr.anchor.set(0.5);
     spr.position.x = o.p[0];
     spr.position.y = o.p[1];
@@ -87,7 +98,7 @@ window.init = function init(app) {
     vy = 0;
     gas = INITIAL_GAS;
     ship.position.x = 0;
-    ship.position.y = 0;
+    ship.position.y = INITIAL_SHIP_Y;
     fg.pivot.x = -W / 2;
     fg.pivot.y = -H / 2;
   }
@@ -110,8 +121,9 @@ window.init = function init(app) {
       // space adds item at ship position (dev time stuff)
       addLevelItem({
         p: [ship.position.x, ship.position.y],
-        d: [32, 32],
-        t: "ground/Grass/grassCenter"
+        t: "gold",
+        k: "gas",
+        a: 0.5
       });
     }
 

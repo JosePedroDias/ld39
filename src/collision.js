@@ -27,7 +27,7 @@ window.shipCollidesWithObstacle = function shipCollidesWithObstacle(
   ];
   function pointHitsObstacle(p) {
     return obstacles.some(function(obs) {
-      if (!obs.visible) {
+      if (!obs.visible || obs.alpha < 1) {
         return false;
       }
       const didHit = b.hit(p, obs);

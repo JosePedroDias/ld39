@@ -110,6 +110,9 @@ This is my Ludum Dare 39 compo entry.
   * ~~basic box collision support~~
   * ~~pick up coin~~
   * ~~gas tank logic~~
-* support for editing level (adding items in-game)
+* start screen > play > game over render states
+* toggle sfx and audio (persist to LS)
+* background with parallax?
+* animated items (coins etc)
+* reset time on game over; highscores
 * create levels
-
