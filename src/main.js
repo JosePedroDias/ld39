@@ -2,7 +2,11 @@
 
 const INITIAL_GAS = 10;
 const INITIAL_SHIP_Y = -220;
-const TITLE_SONG = "TODO";
+const DEATH_Y = 300;
+const IMPULSE_VY = -5;
+const GRAVITY_Y = 0.09;
+const BG_TILE_W = 256;
+//const TITLE_SONG = "TODO";
 const GAME_SONG = "8bit_detective";
 
 function fetchGfx(n) {
@@ -20,7 +24,7 @@ window.init = function init(app) {
 
   // main sprites
   let _tx = PIXI.Texture.fromImage(fetchGfx("black"));
-  const bg = new PIXI.extras.TilingSprite(_tx, W * 2 * Math.ceil(W / 256), H); // probably could be shorter but works
+  const bg = new PIXI.extras.TilingSprite(_tx, W + BG_TILE_W, H);
   app.stage.addChild(bg);
 
   const titleT = PIXI.Sprite.fromImage(fetchGfx("title"));
@@ -57,14 +61,17 @@ window.init = function init(app) {
   fg.addChild(ship);
 
   function onDown() {
-    if (state === "title") {
-      toState("playing");
+    if (state === "title" || state === "gameOver") {
+      return toState("playing");
     }
     if (state !== "playing") {
       return;
     }
-    vy = -5;
-    samples.jump.play();
+    if (gas > 0) {
+      vy = IMPULSE_VY;
+      samples.jump.play();
+      --gas;
+    }
   }
   window.addEventListener("touchstart", onDown);
   window.addEventListener("mousedown", onDown);
@@ -119,17 +126,11 @@ window.init = function init(app) {
   }
 
   function loadLevel(name) {
+    obstacles.forEach(function(obs) {
+      fg.removeChild(obs);
+    });
     const level = window.levels[name];
     level.forEach(addLevelItem);
-  }
-
-  function reset() {
-    app.ticker.update(0); // TODO still doesn't reset game time
-    app.ticker.lastTime = 0;
-
-    obstacles.forEach(function(o) {
-      o.visible = true;
-    });
   }
 
   window.addEventListener("keydown", function(ev) {
@@ -202,9 +203,6 @@ window.init = function init(app) {
       samples.explosion.play();
       state = newState;
       renderFn = gameOverRender;
-      setTimeout(function() {
-        toState("playing");
-      }, 1000);
     }
   }
 
@@ -227,11 +225,10 @@ window.init = function init(app) {
     const t = Math.floor(app.ticker.lastTime / 1000);
     if (t !== time) {
       time = t;
-      --gas;
     }
-    countT.text = `Gas: ${gas}  Coins: ${coins}  Time: ${time}`;
+    countT.text = `Thrusts: ${gas}  Coins: ${coins}  Time: ${time}`;
 
-    if (ship.position.y > 250 || gas <= 0) {
+    if (ship.position.y > DEATH_Y) {
       return toState("gameOver");
     }
 
@@ -256,11 +253,10 @@ window.init = function init(app) {
     ship.position.x += 4 * delta;
     fg.pivot.x += 4 * delta;
     ship.position.y += vy * delta;
-    vy += 0.09 * delta;
-
+    vy += GRAVITY_Y * delta;
     bg.pivot.x += 2 * delta;
-    if (bg.pivot.x > bg._width / 2) {
-      bg.pivot.x -= 256;
+    if (bg.pivot.x > BG_TILE_W) {
+      bg.pivot.x -= BG_TILE_W;
     }
   }
 
