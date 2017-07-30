@@ -1,4 +1,5 @@
 window.textureMap = {
+  title: "title",
   ship: "ship",
   black: "bg/black",
   grass: "ground/Grass/grassCenter",

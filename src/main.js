@@ -2,6 +2,8 @@
 
 const INITIAL_GAS = 10;
 const INITIAL_SHIP_Y = -220;
+const TITLE_SONG = "TODO";
+const GAME_SONG = "8bit_detective";
 
 function fetchGfx(n) {
   return window.solveGfxName(window.textureMap[n]);
@@ -13,15 +15,21 @@ window.init = function init(app) {
   let coins = 0;
   let gas = INITIAL_GAS;
   let time = 0;
-  let running = true;
-  let aboutToPause = false;
+  let state = "title";
+  let renderFn = titleScreenRender;
 
   // main sprites
   let _tx = PIXI.Texture.fromImage(fetchGfx("black"));
   const bg = new PIXI.extras.TilingSprite(_tx, W * 2 * Math.ceil(W / 256), H); // probably could be shorter but works
   app.stage.addChild(bg);
 
-  const countT = new PIXI.Text("---", {
+  const titleT = PIXI.Sprite.fromImage(fetchGfx("title"));
+  titleT.anchor.set(0.5);
+  titleT.x = W / 2;
+  titleT.y = H / 2;
+  app.stage.addChild(titleT);
+
+  const countT = new PIXI.Text(" ", {
     fontWeight: "bold",
     fontSize: 20,
     fontFamily: "Arvo",
@@ -46,11 +54,15 @@ window.init = function init(app) {
   ship.anchor.set(0.5);
   ship.x = 0;
   ship.y = INITIAL_SHIP_Y;
-  ship.hitArea = new PIXI.Rectangle(0, 0, 128, 64);
   fg.addChild(ship);
 
   function onDown() {
-    // if (app.ticker) TODO SKIP IF PAUSED
+    if (state === "title") {
+      toState("playing");
+    }
+    if (state !== "playing") {
+      return;
+    }
     vy = -5;
     samples.jump.play();
   }
@@ -61,11 +73,9 @@ window.init = function init(app) {
   addSample("explosion");
   addSample("jump");
   addSample("powerup");
-  addSong("8bit_detective");
-  songs["8bit_detective"].play();
+  addSong(GAME_SONG);
   samples.jump.volume(0.05);
 
-  const level = window.levels["1"];
   function addLevelItem(o) {
     const t2 = window.textureMap[o.t];
     if (!t2) {
@@ -107,7 +117,11 @@ window.init = function init(app) {
     obstacles.push(spr);
     fg.addChild(spr);
   }
-  level.forEach(addLevelItem);
+
+  function loadLevel(name) {
+    const level = window.levels[name];
+    level.forEach(addLevelItem);
+  }
 
   function reset() {
     app.ticker.update(0); // TODO still doesn't reset game time
@@ -116,30 +130,15 @@ window.init = function init(app) {
     obstacles.forEach(function(o) {
       o.visible = true;
     });
-
-    time = 0;
-    coins = 0;
-    vy = 0;
-    gas = INITIAL_GAS;
-    ship.position.x = 0;
-    ship.position.y = INITIAL_SHIP_Y;
-    fg.pivot.x = -W / 2;
-    fg.pivot.y = -H / 2;
   }
 
   window.addEventListener("keydown", function(ev) {
     if (ev.keyCode === 80) {
       // toggle pause with P
-      running = !running;
-      if (running) {
-        fg.alpha = 1;
-        songs["8bit_detective"].play();
-        app.ticker.start();
-      } else {
-        fg.alpha = 0.5;
-        songs["8bit_detective"].stop();
-        app.ticker.update(0);
-        aboutToPause = true;
+      if (state === "playing") {
+        toState("paused");
+      } else if (state === "paused") {
+        toState("playing");
       }
     } else if (ev.keyCode === 32) {
       // space adds item at ship position (dev time stuff)
@@ -154,15 +153,77 @@ window.init = function init(app) {
     //console.log(ev.keyCode);
   });
 
-  app.ticker.add(function(delta) {
-    // render
-    if (aboutToPause) {
-      countT.text = "paused";
-      app.ticker.stop();
-      aboutToPause = false;
-      return;
-    }
+  /*
+                       +------------+
+                       |            |
++-------------+   +----v----+   +---+----+
+| titleScreen +---> playing +---> paused |
++-------------+   +----^----+   +----+---+
+                       |             |
+                  +----+-----+       |
+                  | gameOver <-------+
+                  +----------+                     */
 
+  function toState(newState) {
+    const trans = `${state} -> ${newState}`;
+    // console.warn(trans);
+    if (newState === "playing") {
+      if (state === "paused") {
+        // paused -> playing
+        fg.alpha = 1;
+      } else if (state === "title" || state === "gameOver") {
+        // title -> playing or gameOver -> playing
+        time = 0;
+        coins = 0;
+        vy = 0;
+        gas = INITIAL_GAS;
+        ship.position.x = 0;
+        ship.position.y = INITIAL_SHIP_Y;
+        fg.pivot.x = -W / 2;
+        fg.pivot.y = -H / 2;
+        titleT.visible = false;
+        loadLevel("1");
+      } else {
+        throw trans;
+      }
+      songs[GAME_SONG].play();
+      app.ticker.start();
+      state = newState;
+      renderFn = playingRender;
+    } else if (newState === "paused") {
+      countT.text = "paused";
+      fg.alpha = 0.5;
+      songs[GAME_SONG].stop();
+      state = newState;
+      renderFn = pausedRender;
+    } else if (newState === "gameOver") {
+      countT.text = "game over!";
+      songs[GAME_SONG].stop();
+      samples.explosion.play();
+      state = newState;
+      renderFn = gameOverRender;
+      setTimeout(function() {
+        toState("playing");
+      }, 1000);
+    }
+  }
+
+  function titleScreenRender() {
+    app.ticker.stop();
+    app.ticker.update(0);
+  }
+
+  function gameOverRender() {
+    app.ticker.stop();
+    app.ticker.update(0);
+  }
+
+  function pausedRender() {
+    app.ticker.stop();
+    app.ticker.update(0);
+  }
+
+  function playingRender(delta) {
     const t = Math.floor(app.ticker.lastTime / 1000);
     if (t !== time) {
       time = t;
@@ -171,8 +232,7 @@ window.init = function init(app) {
     countT.text = `Gas: ${gas}  Coins: ${coins}  Time: ${time}`;
 
     if (ship.position.y > 250 || gas <= 0) {
-      samples.explosion.play();
-      return reset();
+      return toState("gameOver");
     }
 
     if (shipCollidesWithObstacle(ship, obstacles)) {
@@ -180,8 +240,7 @@ window.init = function init(app) {
       const d = obs._data;
       // console.log(`t:${d.t} k:${d.k || "obstacle"}`);
       if (!d.k) {
-        samples.explosion.play();
-        return reset();
+        return toState("gameOver");
       } else {
         obs.visible = false;
         if (d.k === "coin") {
@@ -203,6 +262,10 @@ window.init = function init(app) {
     if (bg.pivot.x > bg._width / 2) {
       bg.pivot.x -= 256;
     }
+  }
+
+  app.ticker.add(function(delta) {
+    renderFn(delta);
   });
 };
 
