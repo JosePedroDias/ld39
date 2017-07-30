@@ -7,6 +7,27 @@ const IMPULSE_VY = -4;
 const GRAVITY_Y = 0.07;
 const BG_TILE_W = 256;
 
+const isMobile = (function() {
+  const ua = navigator.userAgent;
+  return (
+    /android/i.test(ua) || (/iPad|iPhone|iPod/.test(ua) && !window.MSStream)
+  );
+})();
+let needsFS = true;
+
+function reqFS() {
+  needsFS = false;
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  } else if (document.documentElement.mozRequestFullScreen) {
+    document.documentElement.mozRequestFullScreen();
+  } else if (document.documentElement.webkitRequestFullscreen) {
+    document.documentElement.webkitRequestFullscreen();
+  } else if (document.documentElement.msRequestFullscreen) {
+    document.documentElement.msRequestFullscreen();
+  }
+}
+
 function times(n) {
   return new Array(n).fill(0);
 }
@@ -74,6 +95,10 @@ window.init = function init(app) {
   });
 
   function onDown() {
+    if (needsFS) {
+      reqFS();
+    }
+
     if (state === "title" || state === "gameOver") {
       return toState("playing");
     }
@@ -88,8 +113,12 @@ window.init = function init(app) {
       sfx.thrustEmpty.play();
     }
   }
-  window.addEventListener("touchstart", onDown);
-  window.addEventListener("mousedown", onDown);
+
+  if (isMobile) {
+    window.addEventListener("touchstart", onDown);
+  } else {
+    window.addEventListener("mousedown", onDown);
+  }
 
   function addLevelItem(o) {
     const t2 = window.textureMap[o.t];
