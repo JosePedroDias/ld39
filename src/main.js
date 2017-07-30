@@ -1,6 +1,6 @@
 "use strict";
 
-const INITIAL_GAS = 20;
+const INITIAL_GAS = 10;
 
 window.init = function init(app) {
   // game state
@@ -35,8 +35,8 @@ window.init = function init(app) {
     align: "center",
     strokeThickness: 4
   });
-  countT.x = W - 100;
-  countT.y = 50;
+  countT.x = W - 20;
+  countT.y = 20;
   countT.anchor.x = 1;
   app.stage.addChild(countT);
 
@@ -52,17 +52,23 @@ window.init = function init(app) {
   addSample("jump");
   addSample("powerup");
   addSong("8bit_detective");
-  songs["8bit_detective"].play();
+  // songs["8bit_detective"].play();
   samples.jump.volume(0.05);
 
   const level = window.levels["1"];
   function addLevelItem(o) {
-    const tx = PIXI.Texture.fromImage(`assets/gfx/${o.t}.png`);
+    const t2 = window.textureMap[o.t];
+    if (!t2) {
+      window.alert(`Haven't found "${o.t}" in the textureMap!`);
+    }
+    const img = `assets/gfx/${t2}.png`;
+    const tx = PIXI.Texture.fromImage(img);
     const spr = new PIXI.extras.TilingSprite(tx, o.d[0], o.d[1]);
     spr.cacheAsBitmap = true;
     spr.anchor.set(0.5);
     spr.position.x = o.p[0];
     spr.position.y = o.p[1];
+    spr._data = { k: o.k, t: o.t }; // kind and texture name
     obstacles.push(spr);
     fg.addChild(spr);
   }
@@ -71,6 +77,11 @@ window.init = function init(app) {
   function reset() {
     app.ticker.update(0); // TODO still doesn't reset game time
     app.ticker.lastTime = 0;
+
+    obstacles.forEach(function(o) {
+      o.visible = true;
+    });
+
     time = 0;
     coins = 0;
     vy = 0;
@@ -118,17 +129,30 @@ window.init = function init(app) {
     const t = Math.floor(app.ticker.lastTime / 1000);
     if (t !== time) {
       time = t;
+      --gas;
     }
     countT.text = `Gas: ${gas}  Coins: ${coins}  Time: ${time}`;
 
-    if (ship.position.y > 250) {
+    if (ship.position.y > 250 || gas <= 0) {
       samples.explosion.play();
       return reset();
     }
 
     if (shipCollidesWithObstacle(ship, obstacles)) {
-      samples.explosion.play();
-      return reset();
+      const obs = getHitObstacle();
+      const d = obs._data;
+      // console.log(`t:${d.t} k:${d.k || "obstacle"}`);
+      if (!d.k) {
+        samples.explosion.play();
+        return reset();
+      } else {
+        obs.visible = false;
+        if (d.k === "coin") {
+          ++coins;
+        } else if (d.k === "gas") {
+          gas += 10;
+        }
+      }
     }
 
     ship.position.x += 4 * delta;

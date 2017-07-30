@@ -108,7 +108,8 @@ This is my Ludum Dare 39 compo entry.
   * ~~impulse~~
   * ~~texture loading~~
   * ~~basic box collision support~~
-  * pick up coin
-  * gas tank logic
+  * ~~pick up coin~~
+  * ~~gas tank logic~~
 * support for editing level (adding items in-game)
 * create levels
+

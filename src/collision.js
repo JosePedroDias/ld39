@@ -4,6 +4,12 @@ const b = new Bump(PIXI);
 
 //const collision = b.hit(ship, obstacles); // sprite or {x,y}, sprite or Array<Sprite>, dont intersect, bounce, w/ global coords
 
+let _hit;
+
+window.getHitObstacle = function getHitObstacle() {
+  return _hit;
+};
+
 window.shipCollidesWithObstacle = function shipCollidesWithObstacle(
   ship,
   obstacles
@@ -21,7 +27,14 @@ window.shipCollidesWithObstacle = function shipCollidesWithObstacle(
   ];
   function pointHitsObstacle(p) {
     return obstacles.some(function(obs) {
-      return b.hit(p, obs);
+      if (!obs.visible) {
+        return false;
+      }
+      const didHit = b.hit(p, obs);
+      if (didHit) {
+        _hit = obs;
+      }
+      return didHit;
     });
   }
   return points.some(pointHitsObstacle);

@@ -14,7 +14,8 @@
     "samples": true,
     "songs": true,
     "init": true,
-    "shipCollidesWithObstacle": true
+    "shipCollidesWithObstacle": true,
+    "getHitObstacle": true
   },
   "parserOptions": {
     "ecmaVersion": 6,
