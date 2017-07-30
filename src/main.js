@@ -56,6 +56,8 @@ window.init = function init(app) {
   fg.pivot.x = W / 2;
   fg.pivot.y = H / 2;
 
+  app.stage.swapChildren(fg, countT);
+
   const obstacles = [];
 
   const ship = PIXI.Sprite.fromImage(fetchGfx("ship"));
