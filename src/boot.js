@@ -6,7 +6,6 @@ const W = 800;
 const H = 600;
 const AR = W / H;
 
-// window.solveGfxName =
 function solveGfxName(n) {
   return `assets/gfx/${n}.png`;
 }

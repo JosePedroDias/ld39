@@ -16,7 +16,13 @@
     "init": true,
     "shipCollidesWithObstacle": true,
     "getHitObstacle": true,
-    "solveGfxName": true
+    "solveGfxName": true,
+    "genCollisionPoints": true,
+    "item": true,
+    "above": true,
+    "below": true,
+    "both": true,
+    "final": true
   },
   "parserOptions": {
     "ecmaVersion": 6,

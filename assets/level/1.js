@@ -1,7 +1,19 @@
-window.levels["1"] = [
-  { p: [800, 20], t: "silver", k: "coin" },
-  { p: [1000, 20], t: "gold2", k: "gas" },
-  { p: [1200, 0], d: [200, 200], t: "grass" },
-  { p: [1400, 0], d: [100, 100], t: "planet" },
-  { p: [1600, 20], d: [100, 200], t: "grass" }
-];
+(function() {
+  "use strict";
+
+  const a = [];
+
+  // Y GOES DOWN (NEGATIVE IS HIGH)
+
+  item(a, 400, 0, "coin");
+  both(a, 500, 0, 100, 300, "sand");
+  both(a, 800, -50, 100, 300, "sand");
+  item(a, 1000, -150, "gas");
+  above(a, 1000, 50, 100, "sand");
+  both(a, 1300, 50, 100, 250, "sand");
+  item(a, 1600, -100, "coin");
+  below(a, 2000, 50, 100, "earth");
+  final(a, 2800, 100);
+
+  window.levels["1"] = a;
+})();

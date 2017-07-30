@@ -3,11 +3,15 @@
 const INITIAL_GAS = 10;
 const INITIAL_SHIP_Y = -220;
 const DEATH_Y = 300;
-const IMPULSE_VY = -5;
-const GRAVITY_Y = 0.09;
+const IMPULSE_VY = -4;
+const GRAVITY_Y = 0.07;
 const BG_TILE_W = 256;
 //const TITLE_SONG = "TODO";
 const GAME_SONG = "8bit_detective";
+
+function times(n) {
+  return new Array(n).fill(0);
+}
 
 function fetchGfx(n) {
   return window.solveGfxName(window.textureMap[n]);
@@ -59,6 +63,13 @@ window.init = function init(app) {
   ship.x = 0;
   ship.y = INITIAL_SHIP_Y;
   fg.addChild(ship);
+
+  const dots = times(5).map(function() {
+    const spr = PIXI.Sprite.fromImage(fetchGfx("redDot"));
+    spr.anchor.set(0.5);
+    fg.addChild(spr);
+    return spr;
+  });
 
   function onDown() {
     if (state === "title" || state === "gameOver") {
@@ -126,9 +137,11 @@ window.init = function init(app) {
   }
 
   function loadLevel(name) {
-    obstacles.forEach(function(obs) {
+    // clears them too
+    obstacles.splice(0, obstacles.length).forEach(function(obs) {
       fg.removeChild(obs);
     });
+
     const level = window.levels[name];
     level.forEach(addLevelItem);
   }
@@ -143,8 +156,10 @@ window.init = function init(app) {
       }
     } else if (ev.keyCode === 32) {
       // space adds item at ship position (dev time stuff)
+      const p = [~~ship.position.x, ~~ship.position.y];
+      window.console.log(p);
       addLevelItem({
-        p: [ship.position.x, ship.position.y],
+        p: p,
         t: "gold",
         k: "gas",
         a: 0.5
@@ -232,13 +247,24 @@ window.init = function init(app) {
       return toState("gameOver");
     }
 
-    if (shipCollidesWithObstacle(ship, obstacles)) {
+    const points = genCollisionPoints(ship);
+    points.forEach(function(p, i) {
+      const s = dots[i];
+      s.position.x = p[0];
+      s.position.y = p[1];
+    });
+
+    if (shipCollidesWithObstacle(points, obstacles)) {
       const obs = getHitObstacle();
       const d = obs._data;
       // console.log(`t:${d.t} k:${d.k || "obstacle"}`);
       if (!d.k) {
         return toState("gameOver");
       } else {
+        if (d.k === "end") {
+          window.alert("level complete. TODO");
+          return toState("gameOver");
+        }
         obs.visible = false;
         if (d.k === "coin") {
           ++coins;

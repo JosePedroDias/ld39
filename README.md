@@ -112,8 +112,11 @@ This is my Ludum Dare 39 compo entry.
   * ~~gas tank logic~~
 * ~~tiling bg~~
 * ~~animated items (coins etc)~~
-* start screen > play > game over render states
+* ~~start screen > play > game over | pause states~~
+* reset time on game over
+* create more levels
+* pitch ship according to y speed
+* debug & improve collision points
+* highscores (displayed on game over?)
 * toggle sfx and audio (persist to LS)
-* background with parallax?
-* reset time on game over; highscores
-* create levels
+* additional backgrounds with different parallax?
