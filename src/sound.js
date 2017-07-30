@@ -1,12 +1,18 @@
 "use strict";
 
-const samples = {};
-const songs = {};
+const sfx = {};
+const music = {};
 
-window.addSample = function addSample(name) {
-  samples[name] = new Howl({ src: [`assets/sfx/${name}.wav`] });
-};
+function addSfx(name) {
+  sfx[name] = new Howl({ src: [`assets/sfx/${name}.wav`] });
+}
 
-window.addSong = function addSong(name) {
-  songs[name] = new Howl({ src: [`assets/music/${name}.wav`], loop: true });
-};
+function addMusic(name) {
+  music[name] = new Howl({
+    src: [`assets/music/${name}.wav`],
+    loop: name !== "gameOver"
+  });
+}
+
+window.audioMap.sfx.forEach(addSfx);
+window.audioMap.music.forEach(addMusic);

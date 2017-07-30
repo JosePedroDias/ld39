@@ -6,8 +6,6 @@ const DEATH_Y = 300;
 const IMPULSE_VY = -4;
 const GRAVITY_Y = 0.07;
 const BG_TILE_W = 256;
-//const TITLE_SONG = "TODO";
-const GAME_SONG = "8bit_detective";
 
 function times(n) {
   return new Array(n).fill(0);
@@ -25,6 +23,8 @@ window.init = function init(app) {
   let time = 0;
   let state = "title";
   let renderFn = titleScreenRender;
+
+  music.inGame.volume(0);
 
   // main sprites
   let _tx = PIXI.Texture.fromImage(fetchGfx("black"));
@@ -82,19 +82,14 @@ window.init = function init(app) {
     }
     if (gas > 0) {
       vy = IMPULSE_VY;
-      samples.jump.play();
+      sfx.thrust.play();
       --gas;
+    } else {
+      sfx.thrustEmpty.play();
     }
   }
   window.addEventListener("touchstart", onDown);
   window.addEventListener("mousedown", onDown);
-
-  addSample("coin");
-  addSample("explosion");
-  addSample("jump");
-  addSample("powerup");
-  addSong(GAME_SONG);
-  samples.jump.volume(0.05);
 
   function addLevelItem(o) {
     const t2 = window.textureMap[o.t];
@@ -191,6 +186,7 @@ window.init = function init(app) {
         fg.alpha = 1;
       } else if (state === "title" || state === "gameOver") {
         // title -> playing or gameOver -> playing
+        music.gameOver.stop();
         time = 0;
         coins = 0;
         vy = 0;
@@ -204,20 +200,21 @@ window.init = function init(app) {
       } else {
         throw trans;
       }
-      songs[GAME_SONG].play();
+      music.inGame.play();
       app.ticker.start();
       state = newState;
       renderFn = playingRender;
     } else if (newState === "paused") {
       countT.text = "paused";
       fg.alpha = 0.5;
-      songs[GAME_SONG].stop();
+      music.inGame.stop();
       state = newState;
       renderFn = pausedRender;
     } else if (newState === "gameOver") {
       countT.text = "game over!";
-      songs[GAME_SONG].stop();
-      samples.explosion.play();
+      music.inGame.stop();
+      music.gameOver.play();
+      sfx.crash.play();
       state = newState;
       renderFn = gameOverRender;
     }
@@ -270,10 +267,10 @@ window.init = function init(app) {
         obs.visible = false;
         if (d.k === "coin") {
           ++coins;
-          samples.coin.play();
+          sfx.coin.play();
         } else if (d.k === "gas") {
           gas += 10;
-          samples.powerup.play();
+          sfx.fuel.play();
         }
       }
     }

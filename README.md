@@ -82,13 +82,11 @@ This is my Ludum Dare 39 compo entry.
   * <> shooting gallery - bg/*
   * ...
 
-* sfx
-  * [bfxr](http://www.bfxr.net/)
+* sfx and music
 
-* music??
-  * [8 bit detective (placeholder)](https://www.dl-sounds.com/royalty-free/8-bit-detective/)
-  * [aphex twin - not sure licensing](https://aphextwin.warp.net/)
+  full credits to @asilva4000
 
+  composed with reason
 
 ## some references
 
