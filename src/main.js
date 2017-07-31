@@ -2,7 +2,7 @@
 
 const INITIAL_GAS = 10;
 const INITIAL_SHIP_Y = -220;
-const DEATH_Y = 300;
+const DEATH_Y = 340;
 const IMPULSE_VY = -4;
 const GRAVITY_Y = 0.07;
 const BG_TILE_W = 256;
@@ -38,8 +38,10 @@ function fetchGfx(n) {
 
 window.init = function init(app) {
   // game state
+  let levelName = window.levelMap[0];
   let vy = 0;
   let coins = 0;
+  let allCoins = 0;
   let gas = INITIAL_GAS;
   let time = 0;
   let state = "title";
@@ -121,13 +123,15 @@ window.init = function init(app) {
   }
 
   function addLevelItem(o) {
-    const t2 = window.textureMap[o.t];
+    let t2 = window.textureMap[o.t];
     if (!t2) {
       window.alert(`Haven't found "${o.t}" in the textureMap!`);
     }
-    let img, imgs;
+    let img, imgs, speed;
 
     if (t2 instanceof Array) {
+      t2 = t2.slice();
+      speed = t2.shift();
       imgs = t2.map(function(n) {
         return solveGfxName(n);
       });
@@ -141,7 +145,7 @@ window.init = function init(app) {
         return PIXI.Texture.fromImage(i);
       });
       spr = new PIXI.extras.AnimatedSprite(txs);
-      spr.animationSpeed = 0.1;
+      spr.animationSpeed = speed;
       spr.gotoAndPlay(0);
     } else if ("d" in o) {
       const tx = PIXI.Texture.fromImage(img);
@@ -160,15 +164,21 @@ window.init = function init(app) {
     spr._data = { k: o.k, t: o.t }; // kind and texture name
     obstacles.push(spr);
     fg.addChild(spr);
+
+    if (o.k === "coin") {
+      ++allCoins;
+    }
   }
 
   function loadLevel(name) {
     // clears them too
     obstacles.splice(0, obstacles.length).forEach(function(obs) {
       fg.removeChild(obs);
+      obs.destroy();
     });
 
     const level = window.levels[name];
+    allCoins = 0;
     level.forEach(addLevelItem);
   }
 
@@ -226,7 +236,7 @@ window.init = function init(app) {
         fg.pivot.x = -W / 2;
         fg.pivot.y = -H / 2;
         titleT.visible = false;
-        loadLevel("3");
+        loadLevel(levelName);
       } else {
         throw trans;
       }
@@ -241,7 +251,9 @@ window.init = function init(app) {
       state = newState;
       renderFn = pausedRender;
     } else if (newState === "gameOver") {
-      countT.text = "game over!";
+      const obs = getHitObstacle();
+      const madeIt = obs && obs._data && obs._data.k === "end";
+      countT.text = madeIt ? "won!" : "game over!";
       music.main.stop();
       music.gameOver.play();
       sfx.crash.play();
@@ -266,11 +278,10 @@ window.init = function init(app) {
   }
 
   function playingRender(delta) {
-    const t = Math.floor(app.ticker.lastTime / 1000);
-    if (t !== time) {
-      time = t;
-    }
-    countT.text = `Thrusts: ${gas}  Coins: ${coins}  Time: ${time}`;
+    time += delta / 60;
+    countT.text = `Level: ${levelName}  Thrusts: ${gas}  Coins: ${coins}/${allCoins}  Time: ${time.toFixed(
+      0
+    )}`;
 
     if (ship.position.y > DEATH_Y) {
       return toState("gameOver");
@@ -291,7 +302,10 @@ window.init = function init(app) {
         return toState("gameOver");
       } else {
         if (d.k === "end") {
-          window.alert("level complete. TODO");
+          levelName = window.levelMap[window.levelMap.indexOf(levelName) + 1];
+          if (!levelName) {
+            levelName = window.levelMap[0];
+          }
           return toState("gameOver");
         }
         obs.visible = false;

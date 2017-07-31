@@ -114,8 +114,8 @@ This is my Ludum Dare 39 compo entry.
 * ~~start screen > play > game over | pause states~~
 * ~~compress audio to howler compatible formats~~
 * ~~request fs and avoid double events~~
-* reset time on game over
-* level transition
+* ~~reset time on game over~~
+* ~~level transition~~
 * animate title screen
 * toggle sfx and audio (persist to LS)
 * pitch ship according to y speed (requires improved collision det)
@@ -125,3 +125,4 @@ This is my Ludum Dare 39 compo entry.
 * particle effects
 * replace kenney gfx with my own, maybe?
 * create more levels!!
+* review cleanup (ex: sprite.destroy())
