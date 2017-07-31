@@ -116,13 +116,22 @@ This is my Ludum Dare 39 compo entry.
 * ~~request fs and avoid double events~~
 * ~~reset time on game over~~
 * ~~level transition~~
+
+NOW
 * animate title screen
 * toggle sfx and audio (persist to LS)
+
+MAYBE
 * pitch ship according to y speed (requires improved collision det)
 * highscores (displayed on game over?)
-* additional backgrounds with different parallax?
+* prepare publish
+
+WOULD BE SWEET
+* replace kenney gfx with my own, maybe?
+* google analytics, if time permits
+
+DOUBT IT
+* review cleanup (ex: sprite.destroy())
 * implement and add power-ups
 * particle effects
-* replace kenney gfx with my own, maybe?
-* create more levels!!
-* review cleanup (ex: sprite.destroy())
+* additional backgrounds with different parallax?

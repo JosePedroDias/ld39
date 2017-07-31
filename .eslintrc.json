@@ -21,7 +21,15 @@
     "below": true,
     "both": true,
     "final": true,
-    "single": true
+    "single": true,
+    "saveLS": true,
+    "loadLS": true,
+    "deleteLS": true,
+    "resetLS": true,
+    "setSfx": true,
+    "setMusic": true,
+    "useSfx": true,
+    "useMusic": true
   },
   "parserOptions": {
     "ecmaVersion": 6,

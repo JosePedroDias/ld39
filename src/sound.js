@@ -18,3 +18,15 @@ function addMusic(name) {
 
 window.audioMap.sfx.forEach(addSfx);
 window.audioMap.music.forEach(addMusic);
+
+window.setSfx = function setSfx(state) {
+  window.audioMap.sfx.forEach(function(n) {
+    sfx[n].mute(!state);
+  });
+};
+
+window.setMusic = function setMusic(state) {
+  window.audioMap.music.forEach(function(n) {
+    music[n].mute(!state);
+  });
+};

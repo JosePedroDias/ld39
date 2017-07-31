@@ -7,13 +7,28 @@ const IMPULSE_VY = -4;
 const GRAVITY_Y = 0.07;
 const BG_TILE_W = 256;
 
+let useSfx = loadLS("useSfx", true);
+let useMusic = loadLS("useMusic", true);
+let useFS = loadLS("useFS", true);
+//console.log("sfx", useSfx);
+//console.log("music", useMusic);
+//console.log("fs", useFS);
+
+if (!useSfx) {
+  setSfx(false);
+}
+
+if (!useMusic) {
+  setMusic(false);
+}
+
 const isMobile = (function() {
   const ua = navigator.userAgent;
   return (
     /android/i.test(ua) || (/iPad|iPhone|iPod/.test(ua) && !window.MSStream)
   );
 })();
-let needsFS = true;
+let needsFS = useFS;
 
 function reqFS() {
   needsFS = false;
