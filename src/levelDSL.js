@@ -11,6 +11,14 @@ window.final = function final(a, x, y, w) {
   });
 };
 
+window.single = function final(a, x, y, w, h, t) {
+  a.push({
+    p: [x, y],
+    d: [w, h],
+    t: t
+  });
+};
+
 window.both = function both(a, x, y, w, h, t) {
   a.push({
     p: [x, y - (h + H) / 2],
@@ -41,10 +49,10 @@ window.below = function below(a, x, y, w, t) {
   });
 };
 
-window.item = function item(a, x, y, k) {
+window.item = function item(a, x, y, k, t) {
   a.push({
     p: [x, y],
-    t: k === "gas" ? "gold" : "silver",
+    t: t ? t : k === "gas" ? "gold" : "silver",
     k: k
   });
 };

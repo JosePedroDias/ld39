@@ -20,7 +20,8 @@
     "above": true,
     "below": true,
     "both": true,
-    "final": true
+    "final": true,
+    "single": true
   },
   "parserOptions": {
     "ecmaVersion": 6,

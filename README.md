@@ -115,12 +115,13 @@ This is my Ludum Dare 39 compo entry.
 * ~~compress audio to howler compatible formats~~
 * ~~request fs and avoid double events~~
 * reset time on game over
-* pitch ship according to y speed
-* debug & improve collision points
+* level transition
 * animate title screen
-* create more levels
-* implement and add power-ups
-* replace kenney gfx with my own, maybe?
-* highscores (displayed on game over?)
 * toggle sfx and audio (persist to LS)
+* pitch ship according to y speed (requires improved collision det)
+* highscores (displayed on game over?)
 * additional backgrounds with different parallax?
+* implement and add power-ups
+* particle effects
+* replace kenney gfx with my own, maybe?
+* create more levels!!
