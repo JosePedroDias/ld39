@@ -38,13 +38,9 @@
 
   below(a, 4600, 0, 100, "stone");
   item(a, 4600, 100, "coin");
-  // item(a, 4700, 0, "coin");
-  // item(a, 4800, 0, "coin");
   item(a, 4750, 25, "coin");
 
   item(a, 4900, 100, "coin");
-  // item(a, 5000, 0, "coin");
-  // item(a, 5100, 0, "coin");
   item(a, 5050, 25, "coin");
   item(a, 5200, 100, "coin");
   below(a, 4900, 0, 100, "stone");
@@ -56,19 +52,13 @@
   item(a, 5700, -100, "coin");
 
 
-  //
-
   above(a, 6000, -150, 100, "earth");
   item(a, 6000, -200, "coin");
 
   above(a, 6300, -150, 100, "stone");
   item(a, 6300, -200, "coin");
-  // item(a, 6600, -150, "coin");
-  // item(a, 6700, -150, "coin");
   item(a, 6650, -180, "coin");
   item(a, 6800, -150, "coin");
-  // item(a, 6900, -150, "coin");
-  // item(a, 7000, -150, "coin");
   item(a, 6950, -180, "coin");
   item(a, 7100, -150, "coin");
   above(a, 6800, -200, 100, "stone");
