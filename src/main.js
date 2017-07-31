@@ -319,14 +319,17 @@ window.init = function init(app) {
       }
     }
 
-    ship.position.x += 4 * delta;
-    fg.pivot.x += 4 * delta;
-    ship.position.y += vy * delta;
+    const dx = 4 * delta;
+    const dy = vy * delta;
+    fg.pivot.x += dx;
+    ship.position.x += dx;
+    ship.position.y += dy;
     vy += GRAVITY_Y * delta;
     bg.pivot.x += 2 * delta;
     if (bg.pivot.x > BG_TILE_W) {
       bg.pivot.x -= BG_TILE_W;
     }
+    //ship.rotate(90);
   }
 
   app.ticker.add(function(delta) {
