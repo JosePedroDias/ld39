@@ -1,4 +1,3 @@
-
 (function() {
   "use strict";
 
@@ -16,20 +15,16 @@
   item(a, 1200, -75, "coin");
   item(a, 1300, -150, "coin");
 
-
   item(a, 1600, 0, "coin");
 
   item(a, 1800, 200, "coin");
 
   item(a, 2200, -200, "coin");
 
-
-  item(a, 2750, 100, "gas");
-
+  item(a, 2750, 100, "fuel");
 
   both(a, 3500, 0, 400, 200, "stone");
 
-  
   item(a, 3300, 0, "coin");
   item(a, 3400, 0, "coin");
   item(a, 3500, 0, "coin");
@@ -41,8 +36,7 @@
 
   item(a, 4450, -250, "coin");
 
-
-  item(a, 4700, -250, "gas");
+  item(a, 4700, -250, "fuel");
 
   // Y GOES DOWN (NEGATIVE IS HIGH)
 
@@ -99,15 +93,11 @@
   item(a, 8700, -100, "coin");
   item(a, 8800, -150, "coin");
 
-  item(a, 9150, 200, "gas");
+  item(a, 9150, 200, "fuel");
 
-  item(a, 9400, -180, "coin");  
+  item(a, 9400, -180, "coin");
 
   final(a, 9700, 100);
-
-  
-
-  
 
   window.levels["3"] = a;
 })();

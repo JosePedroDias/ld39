@@ -20,13 +20,16 @@ window.WebFontConfig = {
     const loader = PIXI.loaders.shared;
     const keys = Object.keys(window.textureMap);
     keys.forEach(function(k) {
-      const v = window.textureMap[k];
+      let v = window.textureMap[k];
       if (v instanceof Array) {
+        v = v.slice(1);
         v.forEach(function(v2) {
-          loader.add(solveGfxName(v2));
+          const i = solveGfxName(v2);
+          loader.add(i);
         });
       } else {
-        loader.add(solveGfxName(v));
+        const i = solveGfxName(v);
+        loader.add(i);
       }
     });
     loader.load(function() {

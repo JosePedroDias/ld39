@@ -8,7 +8,7 @@ function avg(arr) {
   );
 }
 
-const INITIAL_GAS = 10;
+const INITIAL_FUEL = 10;
 const INITIAL_SHIP_Y = -220;
 const DEATH_Y = 340;
 const IMPULSE_VY = -4;
@@ -18,9 +18,6 @@ const BG_TILE_W = 256;
 let useSfx = loadLS("useSfx", true);
 let useMusic = loadLS("useMusic", true);
 let useFS = loadLS("useFS", true);
-//console.log("sfx", useSfx);
-//console.log("music", useMusic);
-//console.log("fs", useFS);
 
 if (!useSfx) {
   setSfx(false);
@@ -51,10 +48,6 @@ function reqFS() {
   }
 }
 
-function times(n) {
-  return new Array(n).fill(0);
-}
-
 function fetchGfx(n) {
   return window.solveGfxName(window.textureMap[n]);
 }
@@ -66,7 +59,7 @@ window.init = function init(app) {
   let vy = 0;
   let coins = 0;
   let allCoins = 0;
-  let gas = INITIAL_GAS;
+  let fuel = INITIAL_FUEL;
   let time = 0;
   let state = "title";
   let renderFn = titleScreenRender;
@@ -128,11 +121,6 @@ window.init = function init(app) {
   ship.anchor.y = 0.5;
   ship.x = 0;
   ship.y = INITIAL_SHIP_Y;
-
-  // bump collision params
-  //ship.radius = 5;
-  //ship.circular = true;
-
   fg.addChild(ship);
 
   function onDown() {
@@ -146,10 +134,10 @@ window.init = function init(app) {
     if (state !== "playing") {
       return;
     }
-    if (gas > 0) {
+    if (fuel > 0) {
       vy = IMPULSE_VY;
       sfx.thrust.play();
-      --gas;
+      --fuel;
     } else {
       sfx.thrustEmpty.play();
     }
@@ -236,7 +224,7 @@ window.init = function init(app) {
       addLevelItem({
         p: p,
         t: "gold",
-        k: "gas",
+        k: "fuel",
         a: 0.5
       });
     }
@@ -271,7 +259,7 @@ window.init = function init(app) {
         time = 0;
         coins = 0;
         vy = 0;
-        gas = INITIAL_GAS;
+        fuel = INITIAL_FUEL;
         ship.position.x = 0;
         ship.position.y = INITIAL_SHIP_Y;
         fg.pivot.x = -W / 2;
@@ -293,7 +281,7 @@ window.init = function init(app) {
       state = newState;
       renderFn = pausedRender;
     } else if (newState === "gameOver") {
-      const score = { c: coins, t: ~~time, f: gas };
+      const score = { c: coins, t: ~~time, f: fuel };
       saveScore(levelName, score);
       scoresT.text = "HIGH SCORES:\n" + getScores(levelName);
       scoresT.visible = true;
@@ -342,7 +330,7 @@ window.init = function init(app) {
 
   function playingRender(delta) {
     time += delta / 60;
-    countT.text = `Level: ${levelName}  Thrusts: ${gas}  Coins: ${coins}/${allCoins}  Time: ${time.toFixed(
+    countT.text = `Level: ${levelName}  Thrusts: ${fuel}  Coins: ${coins}/${allCoins}  Time: ${time.toFixed(
       0
     )}`;
 
@@ -364,8 +352,8 @@ window.init = function init(app) {
         if (d.k === "coin") {
           ++coins;
           sfx.coin.play();
-        } else if (d.k === "gas") {
-          gas += 10;
+        } else if (d.k === "fuel") {
+          fuel += 10;
           sfx.fuel.play();
         }
       }

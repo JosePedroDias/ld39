@@ -117,17 +117,15 @@ This is my Ludum Dare 39 compo entry.
 * ~~reset time on game over~~
 * ~~level transition~~
 * ~~highscores (displayed on game over)~~
+* ~~pitch ship according to y speed (requires improved collision det)~~
+* ~~graphics made with blender, tg (procedural) and gimp~~
 
 NOW
-* animate title screen
-* toggle sfx and audio (persist to LS) -> done. still no way of toggling
-
-MAYBE
-* pitch ship according to y speed (requires improved collision det)
 * prepare publish
 
-WOULD BE SWEET
-* replace kenney gfx with my own, maybe?
+MAYBE
+* animate title screen
+* toggle sfx and audio (persist to LS) -> done. still no way of toggling
 * google analytics, if time permits
 
 DOUBT IT

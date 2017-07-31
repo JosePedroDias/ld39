@@ -11,13 +11,11 @@
   item(a, 700, 0, "coin");
   item(a, 800, 50, "coin");
 
-
   item(a, 1600, -100, "coin");
   item(a, 1700, -50, "coin");
   item(a, 1800, -150, "coin");
   item(a, 1900, -100, "coin");
   item(a, 2000, -150, "coin");
-
 
   item(a, 2800, 100, "coin");
   item(a, 2900, 150, "coin");
@@ -25,9 +23,7 @@
   item(a, 3100, 100, "coin");
   item(a, 3200, 150, "coin");
 
-
-  item(a, 3500, 0, "gas");
-
+  item(a, 3500, 0, "fuel");
 
   item(a, 3800, 0, "coin");
   item(a, 3900, 0, "coin");
@@ -51,7 +47,6 @@
   item(a, 5600, -100, "coin");
   item(a, 5700, -100, "coin");
 
-
   above(a, 6000, -150, 100, "earth");
   item(a, 6000, -200, "coin");
 
@@ -63,7 +58,7 @@
   item(a, 7100, -150, "coin");
   above(a, 6800, -200, 100, "stone");
 
-  item(a, 7200, 0, "gas");
+  item(a, 7200, 0, "fuel");
 
   item(a, 7500, 200, "coin");
   item(a, 7600, 200, "coin");
@@ -91,7 +86,7 @@
   single(a, 9900, -200, 100, 100, "lava");
   item(a, 9800, -200, "", "pill1");
   item(a, 9700, -200, "", "pill1");
-  
+
   single(a, 9900, 200, 100, 100, "lava");
   item(a, 9800, 200, "", "pill1");
   item(a, 9700, 200, "", "pill1");

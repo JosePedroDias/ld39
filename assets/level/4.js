@@ -17,7 +17,7 @@
   below(a, 2500, 50, 100, "sand");
   below(a, 3600, 50, 100, "sand");
 
-  item(a, 3900, 100, "gas");
+  item(a, 3900, 100, "fuel");
 
   both(a, 4300, -50, 100, 300, "earth");
   both(a, 5000, -50, 600, 300, "earth");
@@ -33,7 +33,7 @@
   item(a, 7800, 0, "coin");
 
   both(a, 8300, -50, 100, 300, "earth");
-  item(a, 7600, 0, "gas");
+  item(a, 7600, 0, "fuel");
   both(a, 8800, 0, 100, 300, "earth");
   both(a, 9100, 50, 100, 300, "earth");
 
@@ -42,7 +42,7 @@
   item(a, 10000, -150, "coin");
   item(a, 10200, -300, "coin");
   item(a, 10400, 0, "coin");
-  item(a, 10600, 0, "gas");
+  item(a, 10600, 0, "fuel");
   item(a, 10800, 100, "coin");
   item(a, 11000, 150, "coin");
   item(a, 11200, 300, "coin");
@@ -53,7 +53,7 @@
   below(a, 12400, 50, 100, "sand");
   above(a, 13100, 50, 100, "sand");
 
-  item(a, 13500, 200, "gas");
+  item(a, 13500, 200, "fuel");
 
   below(a, 13800, 50, 100, "earth");
   above(a, 14200, 50, 100, "earth");

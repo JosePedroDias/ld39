@@ -27,7 +27,7 @@
   item(a, 2400, -50, "coin");
 
   both(a, 2800, 0, 100, 200, "earth");
-  item(a, 2800, 0, "gas");
+  item(a, 2800, 0, "fuel");
 
   //down
   item(a, 3200, -85, "coin");
@@ -64,7 +64,7 @@
   item(a, 4900, -170, "coin");
   item(a, 5000, -170, "coin");
 
-  item(a, 5400, 0, "gas");
+  item(a, 5400, 0, "fuel");
   item(a, 5100, -170, "coin");
   item(a, 5200, -170, "coin");
   item(a, 5300, -170, "coin");
@@ -98,7 +98,7 @@
   item(a, 8800, 0, "coin");
 
   both(a, 9400, 0, 100, 200, "earth");
-  item(a, 9400, 0, "gas");
+  item(a, 9400, 0, "fuel");
 
   both(a, 10000, -150, 100, 200, "earth");
   item(a, 10000, -150, "coin");

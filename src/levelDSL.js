@@ -52,7 +52,7 @@ window.below = function below(a, x, y, w, t) {
 window.item = function item(a, x, y, k, t) {
   a.push({
     p: [x, y],
-    t: t ? t : k === "gas" ? "gold" : "silver",
+    t: t || k,
     k: k
   });
 };
