@@ -10,24 +10,32 @@ window.getHitObstacle = function getHitObstacle() {
   return _hit;
 };
 
-window.genCollisionPoints = function genCollisionPoints(ship) {
-  const x = ship.position.x;
-  const y = ship.position.y;
-  const w = 64;
-  const h = 32;
-  return [
-    { x: x + w * 0.7, y: y - h },
-    { x: x + w, y: y },
-    { x: x + w * 0.7, y: y + h },
-    { x: x - w, y: y - h },
-    { x: x - w, y: y + h }
-  ];
-};
+const _points = (function() {
+  const r = 26;
+  const n = 16;
+  const PI2 = Math.PI * 2;
+  const arr = [];
+  for (let i = 0; i < n; ++i) {
+    const a = i / n * PI2;
+    arr.push({
+      x: r * Math.cos(a),
+      y: r * Math.sin(a)
+    });
+  }
+  return arr;
+})();
+
+function getTranslatedPoints(x, y) {
+  return _points.map(function(p) {
+    return { x: p.x + x, y: p.y + y };
+  });
+}
 
 window.shipCollidesWithObstacle = function shipCollidesWithObstacle(
-  points,
+  ship,
   obstacles
 ) {
+  const points = getTranslatedPoints(ship.position.x, ship.position.y);
   function pointHitsObstacle(p) {
     return obstacles.some(function(obs) {
       if (!obs.visible || obs.alpha < 1) {

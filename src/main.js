@@ -1,5 +1,13 @@
 "use strict";
 
+function avg(arr) {
+  return (
+    arr.reduce(function(a, b) {
+      return a + b;
+    }) / arr.length
+  );
+}
+
 const INITIAL_GAS = 10;
 const INITIAL_SHIP_Y = -220;
 const DEATH_Y = 340;
@@ -116,17 +124,16 @@ window.init = function init(app) {
   const obstacles = [];
 
   const ship = PIXI.Sprite.fromImage(fetchGfx("ship"));
-  ship.anchor.set(0.5);
+  ship.anchor.x = 0.4;
+  ship.anchor.y = 0.5;
   ship.x = 0;
   ship.y = INITIAL_SHIP_Y;
-  fg.addChild(ship);
 
-  const dots = times(5).map(function() {
-    const spr = PIXI.Sprite.fromImage(fetchGfx("redDot"));
-    spr.anchor.set(0.5);
-    fg.addChild(spr);
-    return spr;
-  });
+  // bump collision params
+  //ship.radius = 5;
+  //ship.circular = true;
+
+  fg.addChild(ship);
 
   function onDown() {
     if (needsFS) {
@@ -331,6 +338,8 @@ window.init = function init(app) {
     app.ticker.update(0);
   }
 
+  const rotations = [];
+
   function playingRender(delta) {
     time += delta / 60;
     countT.text = `Level: ${levelName}  Thrusts: ${gas}  Coins: ${coins}/${allCoins}  Time: ${time.toFixed(
@@ -341,14 +350,7 @@ window.init = function init(app) {
       return toState("gameOver");
     }
 
-    const points = genCollisionPoints(ship);
-    points.forEach(function(p, i) {
-      const s = dots[i];
-      s.position.x = p[0];
-      s.position.y = p[1];
-    });
-
-    if (shipCollidesWithObstacle(points, obstacles)) {
+    if (shipCollidesWithObstacle(ship, obstacles)) {
       const obs = getHitObstacle();
       const d = obs._data;
       // console.log(`t:${d.t} k:${d.k || "obstacle"}`);
@@ -381,7 +383,12 @@ window.init = function init(app) {
     }
 
     const angle = Math.atan2(dy, dx);
-    ship.rotation = angle;
+    rotations.push(angle);
+    if (rotations.length > 7) {
+      rotations.shift();
+    }
+    const avgAngle = avg(rotations);
+    ship.rotation = avgAngle;
   }
 
   app.ticker.add(function(delta) {
