@@ -54,6 +54,7 @@ function fetchGfx(n) {
 window.init = function init(app) {
   // game state
   let levelName = window.levelMap[0];
+  let nextLevelName = levelName;
   let vy = 0;
   let coins = 0;
   let allCoins = 0;
@@ -75,6 +76,21 @@ window.init = function init(app) {
   titleT.y = H / 2;
   app.stage.addChild(titleT);
 
+  const scoresT = new PIXI.Text(" ", {
+    fontWeight: "bold",
+    fontSize: 26,
+    fontFamily: "Arvo",
+    fill: "#FFF",
+    stroke: "#444",
+    align: "center",
+    strokeThickness: 4
+  });
+  scoresT.x = W / 2;
+  scoresT.y = H / 2;
+  scoresT.anchor.set(0.5);
+  scoresT.visible = false;
+  app.stage.addChild(scoresT);
+
   const countT = new PIXI.Text(" ", {
     fontWeight: "bold",
     fontSize: 20,
@@ -95,6 +111,7 @@ window.init = function init(app) {
   fg.pivot.y = H / 2;
 
   app.stage.swapChildren(fg, countT);
+  app.stage.swapChildren(fg, scoresT);
 
   const obstacles = [];
 
@@ -240,6 +257,7 @@ window.init = function init(app) {
         fg.alpha = 1;
       } else if (state === "title" || state === "gameOver") {
         // title -> playing or gameOver -> playing
+        scoresT.visible = false;
         music.title.stop();
         music.gameOver.stop();
         time = 0;
@@ -251,6 +269,7 @@ window.init = function init(app) {
         fg.pivot.x = -W / 2;
         fg.pivot.y = -H / 2;
         titleT.visible = false;
+        levelName = nextLevelName;
         loadLevel(levelName);
       } else {
         throw trans;
@@ -266,8 +285,21 @@ window.init = function init(app) {
       state = newState;
       renderFn = pausedRender;
     } else if (newState === "gameOver") {
+      const score = { c: coins, t: ~~time, f: gas };
+      saveScore(levelName, score);
+      scoresT.text = "HIGH SCORES:\n" + getScores(levelName);
+      scoresT.visible = true;
+
       const obs = getHitObstacle();
       const madeIt = obs && obs._data && obs._data.k === "end";
+
+      if (madeIt) {
+        nextLevelName = window.levelMap[window.levelMap.indexOf(levelName) + 1];
+        if (!nextLevelName) {
+          nextLevelName = window.levelMap[0];
+        }
+      }
+
       countT.text = madeIt ? "won!" : "game over!";
       music.main.stop();
       music.gameOver.play();
@@ -317,10 +349,6 @@ window.init = function init(app) {
         return toState("gameOver");
       } else {
         if (d.k === "end") {
-          levelName = window.levelMap[window.levelMap.indexOf(levelName) + 1];
-          if (!levelName) {
-            levelName = window.levelMap[0];
-          }
           return toState("gameOver");
         }
         obs.visible = false;

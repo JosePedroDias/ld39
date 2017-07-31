@@ -116,14 +116,14 @@ This is my Ludum Dare 39 compo entry.
 * ~~request fs and avoid double events~~
 * ~~reset time on game over~~
 * ~~level transition~~
+* ~~highscores (displayed on game over)~~
 
 NOW
 * animate title screen
-* toggle sfx and audio (persist to LS)
+* toggle sfx and audio (persist to LS) -> done. still no way of toggling
 
 MAYBE
 * pitch ship according to y speed (requires improved collision det)
-* highscores (displayed on game over?)
 * prepare publish
 
 WOULD BE SWEET

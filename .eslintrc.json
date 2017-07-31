@@ -29,7 +29,9 @@
     "setSfx": true,
     "setMusic": true,
     "useSfx": true,
-    "useMusic": true
+    "useMusic": true,
+    "getScores": true,
+    "saveScore": true
   },
   "parserOptions": {
     "ecmaVersion": 6,
