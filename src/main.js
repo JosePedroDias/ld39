@@ -260,6 +260,7 @@ window.init = function init(app) {
         scoresT.visible = false;
         music.title.stop();
         music.gameOver.stop();
+        music.transition.stop();
         time = 0;
         coins = 0;
         vy = 0;
@@ -302,8 +303,14 @@ window.init = function init(app) {
 
       countT.text = madeIt ? "won!" : "game over!";
       music.main.stop();
-      music.gameOver.play();
-      sfx.crash.play();
+
+      if (madeIt) {
+        sfx.win.play();
+        music.transition.play();
+      } else {
+        sfx.crash.play();
+        music.gameOver.play();
+      }
       state = newState;
       renderFn = gameOverRender;
     }
