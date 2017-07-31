@@ -9,5 +9,5 @@ window.textureMap = {
   lava: "tile/lava",
   checkers: "tile/checkers2",
   gold: ["item/gold_1", "item/gold_2", "item/gold_3", "item/gold_4"],
-  silver: "item/silver_1"
+  silver: ["item/silver_1", "item/silver_2", "item/silver_3", "item/silver_4"]
 };

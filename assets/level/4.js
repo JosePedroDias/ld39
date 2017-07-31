@@ -26,7 +26,6 @@
   both(a, 6300, 0, 100, 300, "sand");
   both(a, 6500, 50, 100, 300, "sand");
 
-
   item(a, 7000, 0, "coin");
   item(a, 7200, -100, "coin");
   item(a, 7400, -200, "coin");
@@ -49,7 +48,7 @@
   item(a, 11200, 300, "coin");
   item(a, 11400, 0, "coin");
 
-  item(a,  11700, 50, "coin");
+  item(a, 11700, 50, "coin");
   above(a, 12000, 50, 100, "sand");
   below(a, 12400, 50, 100, "sand");
   above(a, 13100, 50, 100, "sand");
@@ -62,5 +61,5 @@
 
   final(a, 15600, 100);
 
-  window.levels["1"] = a;
+  window.levels["4"] = a;
 })();

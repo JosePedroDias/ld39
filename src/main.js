@@ -226,7 +226,7 @@ window.init = function init(app) {
         fg.pivot.x = -W / 2;
         fg.pivot.y = -H / 2;
         titleT.visible = false;
-        loadLevel("1");
+        loadLevel("3");
       } else {
         throw trans;
       }

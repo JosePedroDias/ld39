@@ -3,7 +3,6 @@
 
   const a = [];
 
-  
   // Y GOES DOWN (NEGATIVE IS HIGH)
 
   both(a, 600, 0, 100, 200, "earth");
@@ -65,7 +64,6 @@
   item(a, 4900, -170, "coin");
   item(a, 5000, -170, "coin");
 
-  
   item(a, 5400, 0, "gas");
   item(a, 5100, -170, "coin");
   item(a, 5200, -170, "coin");
@@ -83,7 +81,7 @@
   item(a, 6200, 0, "coin");
   item(a, 6300, 0, "coin");
 
-// 7000
+  // 7000
   both(a, 7000, 150, 100, 200, "earth");
   item(a, 7000, 150, "coin");
 
@@ -107,12 +105,8 @@
 
   both(a, 10600, -150, 100, 200, "earth");
   item(a, 10600, -150, "coin");
-  
-
 
   final(a, 11000, 100);
 
-  
-
-  window.levels["1"] = a;
+  window.levels["3"] = a;
 })();
