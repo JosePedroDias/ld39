@@ -379,7 +379,9 @@ window.init = function init(app) {
     if (bg.pivot.x > BG_TILE_W) {
       bg.pivot.x -= BG_TILE_W;
     }
-    //ship.rotate(90);
+
+    const angle = Math.atan2(dy, dx);
+    ship.rotation = angle;
   }
 
   app.ticker.add(function(delta) {
