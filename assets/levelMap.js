@@ -1,3 +1,3 @@
 "use strict";
 
-window.levelMap = ["1", "3", "4"];
+window.levelMap = ["1", "2", "3", "4"];
