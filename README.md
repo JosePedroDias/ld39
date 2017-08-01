@@ -1,7 +1,6 @@
-# LD39 - gas it up
+# LD39 - Soaring
 
-
-This is my Ludum Dare 39 compo entry.
+This is a Ludum Dare 39 game jam entry.
 
 
 ## Game summary
