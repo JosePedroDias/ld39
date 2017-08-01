@@ -72,20 +72,15 @@ This is my Ludum Dare 39 compo entry.
 
 ## Artwork stack
 
-* graphics (inkscape, graphicsgale and/or gimp, not sure yet)
-  * <> jumper pack - item/coins
-  * <https://kenney.nl/assets/platformer-pack-redux>
-  * <https://kenney.nl/assets/background-elements>
-  * <https://kenney.nl/assets/physics-assets>
-  * <https://kenney.nl/assets/space-shooter-redux> - item/pills
-  * <> shooting gallery - bg/*
-  * ...
+* graphics
+  * used [blender3D](https://www.blender.org/), [inkscape](https://inkscape.org/),  [gimp](https://www.gimp.org/) and generated some procedural textures with [tg](http://blackpawn.com/dev/tg.html)
+  * the background sky and a couple of pill sprites came up from kenney.nl, didn't manage to replace those in time :P
 
 * sfx and music
 
-  full credits to @asilva4000
+  full credits to [@asilva4000](https://twitter.com/asilva4000)
 
-  composed with reason
+  composed with [reason](https://www.propellerheads.se/en/reason)
 
   audio encoding with [xmedia recode](http://www.xmedia-recode.de/download.html)
 
@@ -119,9 +114,7 @@ This is my Ludum Dare 39 compo entry.
 * ~~highscores (displayed on game over)~~
 * ~~pitch ship according to y speed (requires improved collision det)~~
 * ~~graphics made with blender, tg (procedural) and gimp~~
-
-NOW
-* prepare publish
+* ~~prepare publish~~
 
 MAYBE
 * animate title screen
