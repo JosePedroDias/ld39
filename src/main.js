@@ -218,18 +218,8 @@ window.init = function init(app) {
         toState("playing");
       }
     } else if (ev.keyCode === 32) {
-      // space adds item at ship position (dev time stuff)
-      const p = [~~ship.position.x, ~~ship.position.y];
-      window.console.log(p);
-      addLevelItem({
-        p: p,
-        t: "gold",
-        k: "fuel",
-        a: 0.5
-      });
+      onDown();
     }
-
-    //console.log(ev.keyCode);
   });
 
   /*
